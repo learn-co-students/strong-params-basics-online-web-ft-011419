@@ -11,19 +11,27 @@ class PostsController < ApplicationController
 		@post = Post.new
 	end
 
-	def create
-	  @post = Post.new(params["post"])
-	  @post.save
-	  redirect_to post_path(@post)
-	end
-
-	def update
-	  @post = Post.find(params[:id])
-	  @post.update(params["post"])
-	  redirect_to post_path(@post)
-	end
-
 	def edit
 	  @post = Post.find(params[:id])
 	end
+
+	def create
+			@post = Post.new
+	    @post.title = params[:post][:title]
+	    @post.description = params[:post][:description]
+  		@post.save
+  redirect_to post_path(@post)
+end
+
+def update
+  @post = Post.find(params[:id])
+	@post.update(title: params[:post][:title], description: params[:post][:description])
+  redirect_to post_path(@post)
+end
+
+private
+
+def post_params(*args)
+  params.require(:post).permit(*args)
+end
 end
